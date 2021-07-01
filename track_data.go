@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bytes"
-	"io"
 	"net/http"
-	"strconv"
 )
 
 type Track struct {
@@ -20,27 +17,6 @@ type Track struct {
 	Album    *Album
 }
 
-// download returns an array of bytes containing
-// the track in mp3 format.
-func (t Track) download() ([]byte, error) {
-	response, err := http.Get(t.File.Mp3128)
-	if err != nil {
-		return nil, err
-	}
-	defer response.Body.Close()
-
-	reader := io.Reader(response.Body)
-
-	//data := t.tag(reader)
-	var data bytes.Buffer
-	io.Copy(&data, reader)
-	if err != nil {
-		return nil, err
-	}
-
-	return data.Bytes(), nil
-}
-
 // getSize fetches the headers for the track and
 // returns the Content-Length header.
 func (t Track) getSize() (size int, err error) {
@@ -50,8 +26,8 @@ func (t Track) getSize() (size int, err error) {
 	}
 
 	defer response.Body.Close()
-	size, _ = strconv.Atoi(response.Header.Get("Content-Length"))
-	return size, nil
+	//size, _ = strconv.Atoi(response.Header.Get("Content-Length"))
+	return int(response.ContentLength), nil
 }
 
 // func (t Track) tag(reader io.Reader) bytes.Buffer {

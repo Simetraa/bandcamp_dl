@@ -1,12 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"io/fs"
-	"io/ioutil"
 	"log"
-	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -49,26 +44,27 @@ func (a Album) fixAlbum() {
 	}
 }
 
-func (a Album) download() {
-	for _, track := range a.Trackinfo {
-		cwd, err := os.Getwd()
-		if err != nil {
-			log.Fatal(err)
-		}
-		track.File.Path = filepath.Join(cwd, a.Artist, a.Current.Title, track.Title+".mp3")
-		fmt.Println("Downloading", track.Title, "to", track.File.Path)
-		data, err := track.download()
-		if err != nil {
-			log.Fatal(err)
-		}
+// func (a Album) download() {
+// 	for _, track := range a.Trackinfo {
+// 		cwd, err := os.Getwd()
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		track.File.Path = filepath.Join(cwd, a.Artist, a.Current.Title, track.Title+".mp3")
+// 		fmt.Println("Downloading", track.Title, "to", track.File.Path)
+// 		data := track.download()
 
-		err = os.MkdirAll(filepath.Dir(track.File.Path), fs.ModePerm)
-		if err != nil {
-			log.Fatal(err)
-		}
-		err = ioutil.WriteFile(track.File.Path, data, fs.ModePerm)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-}
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+
+// 		err = os.MkdirAll(filepath.Dir(track.File.Path), fs.ModePerm)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		err = ioutil.WriteFile(track.File.Path, data, fs.ModePerm)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 	}
+// }
